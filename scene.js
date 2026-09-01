@@ -125,7 +125,27 @@ export const CARDS = [
   // moulded ribs are thinner still.
   { src: 'assets/0db6a1a0d52e059cecdb54a04849f386.jpg', tolerance: 30, erodePx: 0, featherPx: 1, loose: 1.6, edgeGuard: 18 },
 
+  // Green paint smear on white. Saturated green is far from the key, clean
+  // separation. The thin feathered edges of the smear benefit from erode 0.
+  { src: 'assets/Paint.jpg', tolerance: 50, erodePx: 0, featherPx: 1 },
 
+  // Esc keycap on white. The brushed aluminium top is pale and close to the
+  // backdrop value, so tolerance stays moderate. The keycap's bevel shadow is
+  // dark enough to survive easily.
+  { src: 'assets/821dc76a-c6d8-4f03-99f3-d874b9a508b1.png', tolerance: 42, erodePx: 1, featherPx: 1 },
+
+  // Chrome espresso cup and saucer on white. The polished metal reflects the
+  // white surroundings so parts of the saucer rim are near-white — tight
+  // tolerance with hysteresis keeps the flood from crossing into reflections.
+  { src: 'assets/tea.png', tolerance: 38, erodePx: 0, featherPx: 1, loose: 1.4, edgeGuard: 24 },
+
+  // Sardine tin on white. Gold can and silver fish have good separation from
+  // the backdrop. Clean edge, standard tolerance.
+  { src: 'assets/sardines.png', tolerance: 48, erodePx: 1, featherPx: 1 },
+
+  // Red L'Oréal lipstick on white. Strong colour separation — the red bullet
+  // and gold tube are far from the key. Clean vertical silhouette.
+  { src: 'assets/Lipstick.png', tolerance: 50, erodePx: 1, featherPx: 1 },
 ];
 
 function loadImage(src) {
@@ -144,7 +164,7 @@ async function loadBitmap(src) {
   const res = await fetch(src);
   if (!res.ok) throw new Error('missing ' + src);
   const blob = await res.blob();
-  return createImageBitmap(blob);
+  return createImageBitmap(blob, { imageOrientation: 'flipY' });
 }
 
 // Worker path. Returns { canvas-ish source, aspect } where the source is an
@@ -467,6 +487,7 @@ export function createOrbitScene(container, loadCounter) {
     tex.generateMipmaps = true;
     tex.minFilter = THREE.LinearMipmapLinearFilter;
     tex.magFilter = THREE.LinearFilter;
+    tex.flipY = false;
     tex.needsUpdate = true;
 
     const mat = new THREE.MeshBasicMaterial({
