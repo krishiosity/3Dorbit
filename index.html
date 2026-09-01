@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Taskeen Limalia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="modulepreload" href="https://unpkg.com/three@0.183.0/build/three.module.js" crossorigin />
+  <!-- Only weights 400 and 500 are ever used; 700 was pulling a third font
+       file over the wire for nothing. -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      overflow: hidden;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      color: #171514;
+    }
+    /* Hide the native cursor, but ONLY where there is a pointer to replace.
+       Applying this on touch devices is harmless for the cursor itself, yet
+       the rule is scoped anyway so desktop-only behaviour stays obvious. */
+    @media (hover: hover) and (pointer: fine) {
+      html, body, *, *::before, *::after { cursor: none !important; }
+    }
+    /* Touch: never let a drag scroll or rubber-band the page instead of
+       spinning the ring. */
+    @media (hover: none), (pointer: coarse) {
+      html, body { overscroll-behavior: none; touch-action: none; }
+    }
+    #root {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      /* `100%` height resolves against a collapsed containing block in some
+         mobile browsers, leaving a zero-height canvas. Explicit viewport
+         units — with the dynamic variant where supported — avoid that. */
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+    }
+    #root canvas { display: block; width: 100%; height: 100%; }
+    /* Stop iOS from double-tap-zooming or showing a tap highlight when the
+       user flicks the ring. */
+    * { -webkit-tap-highlight-color: transparent; }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.183.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.183.0/examples/jsm/",
+        "three/tsl": "https://unpkg.com/three@0.183.0/build/three.tsl.js",
+        "three/webgpu": "https://unpkg.com/three@0.183.0/build/three.webgpu.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
