@@ -143,20 +143,21 @@ export const CARDS = [
   { src: 'assets/lipstick.png', raw: true },
 ];
 
+const _bustCache = '?v=' + Date.now();
 function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
     img.onerror = () => reject(new Error('missing ' + src));
-    img.src = src;
+    img.src = src + _bustCache;
   });
 }
 
 // Decode straight to an ImageBitmap so the worker never touches the DOM and
 // the decode itself happens off the main thread.
 async function loadBitmap(src) {
-  const res = await fetch(src);
+  const res = await fetch(src + _bustCache);
   if (!res.ok) throw new Error('missing ' + src);
   const blob = await res.blob();
   return createImageBitmap(blob, { imageOrientation: 'flipY' });
