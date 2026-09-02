@@ -54,8 +54,8 @@ export const CARDS = [
   // a tight tolerance is plenty and keeps the key's dark bevel shadow.
   { src: 'assets/escape.png', tolerance: 46, erodePx: 1, featherPx: 1, bg: 'black' },
 
-  // Prada bag: saturated green against black. Clean separation.
-  { src: 'assets/purse.png', tolerance: 48, erodePx: 1, featherPx: 1, bg: 'black' },
+  // Prada bag — pre-processed transparent PNG.
+  { src: 'assets/purse.png', raw: true },
 
   // Black leather boot on black. Hardest key in the set — subject and
   // backdrop are the same hue, separated only by specular sheen on the
@@ -82,12 +82,8 @@ export const CARDS = [
   // erode anyway.
   { src: 'assets/tomato.png', tolerance: 44, erodePx: 0, featherPx: 1, bg: 'black' },
 
-  // White EarPods on pure black — the widest value separation in the whole
-  // set, so tolerance can run generously without touching the subject.
-  // erode is 0 and NON-NEGOTIABLE here: the coiled cable is a white line
-  // only a few pixels wide at this resolution, and a single erode pass would
-  // break it into dashes or sever the loops. No halo risk against true black.
-  { src: 'assets/headphones.png', tolerance: 56, erodePx: 0, featherPx: 1, bg: 'black' },
+  // White EarPods — pre-processed transparent PNG.
+  { src: 'assets/headphones.png', raw: true },
 
   // macOS folder icon: pale blue slab on pure black. Wide value separation,
   // but the icon carries a soft drop shadow that fades into the backdrop
@@ -143,9 +139,8 @@ export const CARDS = [
   // the backdrop. Clean edge, standard tolerance.
   { src: 'assets/sardines.png', tolerance: 48, erodePx: 1, featherPx: 1 },
 
-  // Red L'Oréal lipstick on white. Strong colour separation — the red bullet
-  // and gold tube are far from the key. Clean vertical silhouette.
-  { src: 'assets/Lipstick.png', tolerance: 50, erodePx: 1, featherPx: 1 },
+  // Red L'Oréal lipstick — pre-processed transparent PNG.
+  { src: 'assets/lipstick.png', raw: true },
 ];
 
 function loadImage(src) {
@@ -450,6 +445,7 @@ export function createOrbitScene(container, loadCounter) {
 
   let spin = 0;
   let spinVel = 0;
+  let paused = false;
   let tilt = vp.restTilt;
   let dist = vp.dist;
   let radius = vp.radius;
@@ -487,7 +483,7 @@ export function createOrbitScene(container, loadCounter) {
     tex.generateMipmaps = true;
     tex.minFilter = THREE.LinearMipmapLinearFilter;
     tex.magFilter = THREE.LinearFilter;
-    tex.flipY = false;
+    if (source instanceof ImageBitmap) tex.flipY = false;
     tex.needsUpdate = true;
 
     const mat = new THREE.MeshBasicMaterial({
@@ -497,13 +493,13 @@ export function createOrbitScene(container, loadCounter) {
       side: THREE.DoubleSide,
       depthWrite: false,
       toneMapped: false,
-      opacity: 0
+      opacity: 1
     });
 
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
     mesh.scale.set(0.0001, 0.0001, 1);
     ring.add(mesh);
-    planes[i] = { mesh, aspect: aspect || 1, fade: 0 };
+    planes[i] = { mesh, aspect: aspect || 1, fade: 1 };
 
     // Upload immediately, then release the source. An ImageBitmap holds
     // decoded pixels outside the JS heap, and sixteen of them alive at once
@@ -634,7 +630,7 @@ export function createOrbitScene(container, loadCounter) {
       }
     }
     spinVel += (0 - spinVel) * 0.06;
-    spin += spinVel + 0.0016;
+    if (!paused) spin += spinVel + 0.0016;
     ring.rotation.y = spin;
 
     // Skip the draw when nothing is moving and every card has finished
@@ -688,6 +684,8 @@ export function createOrbitScene(container, loadCounter) {
     dispose,
     renderer,
     total: CARDS.length,
-    filled: () => filled
+    filled: () => filled,
+    togglePause: () => { paused = !paused; return paused; },
+    isPaused: () => paused
   };
 }

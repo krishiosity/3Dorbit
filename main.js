@@ -16,7 +16,7 @@ const name = createTypewriter('Taskeen Limalia', {
   typeMs: 105,
   holdMs: 2200
 });
-const role = createTypewriter('Creative Developer', {
+const role = createTypewriter('Creative Director', {
   variant: 'role',
   typeMs: 78,
   holdMs: 2600
@@ -52,6 +52,42 @@ role.start(900);
       orbit.update(cursor);
     };
     requestAnimationFrame(tick);
+
+    // Pause / play toggle button
+    const pauseSVG = `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="4" width="7" height="24" rx="2.5" fill="#999"/><rect x="19" y="4" width="7" height="24" rx="2.5" fill="#999"/></svg>`;
+    const playSVG = `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M8 4.5a2 2 0 0 1 3-1.73l16 11.27a2 2 0 0 1 0 3.46L11 28.77A2 2 0 0 1 8 27.04z" fill="#999"/></svg>`;
+
+    const btn = document.createElement('button');
+    btn.id = 'pausePlayBtn';
+    btn.innerHTML = pauseSVG;
+    btn.setAttribute('aria-label', 'Pause orbit');
+    Object.assign(btn.style, {
+      position: 'fixed',
+      bottom: '24px',
+      right: '24px',
+      width: '44px',
+      height: '44px',
+      padding: '8px',
+      background: 'rgba(255,255,255,0.85)',
+      border: '1px solid rgba(0,0,0,0.1)',
+      borderRadius: '50%',
+      cursor: 'pointer',
+      zIndex: '50',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backdropFilter: 'blur(6px)',
+      transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+    });
+    btn.addEventListener('mouseenter', () => { btn.style.transform = 'scale(1.1)'; });
+    btn.addEventListener('mouseleave', () => { btn.style.transform = 'scale(1)'; });
+    btn.addEventListener('click', () => {
+      const nowPaused = orbit.togglePause();
+      btn.innerHTML = nowPaused ? playSVG : pauseSVG;
+      btn.setAttribute('aria-label', nowPaused ? 'Play orbit' : 'Pause orbit');
+    });
+    document.body.appendChild(btn);
 
     orbit.build().then(() => loadCounter.finish());
 
