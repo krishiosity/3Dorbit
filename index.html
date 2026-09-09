@@ -10,7 +10,7 @@
   <link rel="modulepreload" href="https://unpkg.com/three@0.183.0/build/three.module.js" crossorigin />
   <!-- Only weights 400 and 500 are ever used; 700 was pulling a third font
        file over the wire for nothing. -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;700&display=swap" rel="stylesheet" />
   <style>
     html, body {
       margin: 0;
@@ -48,6 +48,199 @@
     /* Stop iOS from double-tap-zooming or showing a tap highlight when the
        user flicks the ring. */
     * { -webkit-tap-highlight-color: transparent; }
+
+    /* Top navigation menu */
+    #top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      padding: 1.5rem 2rem;
+      pointer-events: auto;
+    }
+    #top-nav a {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #171514;
+      padding-bottom: 0.25rem;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    #top-nav a.active,
+    #top-nav a:hover {
+      border-bottom-color: #171514;
+    }
+
+    /* Page sections */
+    .page-section {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: #ffffff;
+      overflow-y: auto;
+      padding: 6rem 4rem 4rem;
+      box-sizing: border-box;
+    }
+    .page-section.visible {
+      display: block;
+    }
+
+    /* Résumé / Experience section */
+    #resume-section {
+      display: none;
+    }
+    #resume-section.visible {
+      display: block;
+    }
+    .experience-layout {
+      display: flex;
+      gap: 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-top: 2rem;
+    }
+    .experience-header {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 3rem;
+      color: #171514;
+      flex-shrink: 0;
+    }
+    .experience-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .experience-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .experience-item .role {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #444;
+    }
+    .experience-item .company {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #444;
+    }
+
+    /* Awards section */
+    .awards-section {
+      margin-top: 4rem;
+    }
+    .awards-layout {
+      display: flex;
+      gap: 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .awards-header {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 3rem;
+      color: #171514;
+      flex-shrink: 0;
+      min-width: 220px;
+    }
+    .awards-content {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+    .award-group h3 {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #333;
+      text-transform: uppercase;
+      margin: 0 0 1rem 0;
+    }
+    .award-group ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .award-group ul li {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.95rem;
+      color: #444;
+    }
+    .award-group ul li strong {
+      font-weight: 700;
+      color: #333;
+    }
+
+    /* Education section */
+    .education-section {
+      margin-top: 4rem;
+      border-top: 1px solid #ddd;
+      padding-top: 3rem;
+    }
+    .education-layout {
+      display: flex;
+      gap: 6rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .education-header {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 3rem;
+      color: #171514;
+      flex-shrink: 0;
+      min-width: 220px;
+    }
+    .education-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .education-item .school {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #333;
+    }
+    .education-item .school span {
+      font-weight: 400;
+      color: #666;
+    }
+    .education-item .detail {
+      font-size: 0.85rem;
+      color: #666;
+      margin: 0;
+    }
+
+    /* About Me section */
+    #about-section {
+      display: none;
+    }
+    #about-section.visible {
+      display: block;
+    }
+    .about-header {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 200;
+      font-size: 3.5rem;
+      color: #171514;
+      margin: 0;
+    }
   </style>
   <script type="importmap">
     {
@@ -61,7 +254,280 @@
   </script>
 </head>
 <body>
+  <nav id="top-nav">
+    <a href="#work" class="active">WORK</a>
+    <a href="#resume">RÉSUMÉ</a>
+    <a href="#about">ABOUT ME</a>
+  </nav>
+  <div id="resume-section" class="page-section">
+    <div class="experience-layout">
+      <div class="experience-header">Experience:</div>
+      <div class="experience-list">
+        <div class="experience-item">
+          <span class="role">Creative Director</span>
+          <span class="company">McCann New York</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Creative Director</span>
+          <span class="company">Grey New York</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Senior Creative</span>
+          <span class="company">Leo Burnett Dubai</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Senior Creative</span>
+          <span class="company">McCann Health Dubai</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Senior Art Director</span>
+          <span class="company">IMPACT BBDO Dubai</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Art Director /</span>
+          <span class="company">Memac Ogilvy &amp; Mather Doha</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Art Director /</span>
+          <span class="company">Ogilvy &amp; Mather South Africa</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Art Director / Photographer, Content Creator</span>
+          <span class="company">Friends of the Earth Malta NGO</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Art Director</span>
+          <span class="company">Media24 Cape Town</span>
+        </div>
+        <div class="experience-item">
+          <span class="role">Creative internship</span>
+          <span class="company">The Hardy Boys — South Africa</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Awards -->
+    <div class="awards-section">
+      <div class="awards-layout">
+        <div class="awards-header">Awards:</div>
+        <div class="awards-content">
+
+          <div class="award-group">
+            <h3>DUBAI LYNX</h3>
+            <ul>
+              <li><strong>Grand Prix for Good</strong> (2019)</li>
+              <li><strong>Glass Lynx</strong> (2019)</li>
+              <li><strong>Gold</strong> - Creative Effectiveness (2022)</li>
+              <li><strong>Gold</strong> - Creative Effectiveness (2022)</li>
+              <li><strong>Gold</strong> - Healthcare (2020/2021)</li>
+              <li><strong>Gold</strong> - Media (2020/2021)</li>
+              <li><strong>Gold</strong> - Design (2020/2021)</li>
+              <li><strong>Gold</strong> - Healthcare - public education &amp; awareness (2019)</li>
+              <li><strong>Gold</strong> - Design - logo design (2019)</li>
+              <li><strong>Gold</strong> - Direct - low budget high impact campaign (2019)</li>
+              <li><strong>Gold</strong> - <strong>Young Lynx</strong> Print winner (2018)</li>
+              <li><strong>Silver</strong> - Healthcare (2020/2021)</li>
+              <li><strong>Silver</strong> - Healthcare (2020/2021)</li>
+              <li><strong>Silver</strong> - Media (2020/2021)</li>
+              <li><strong>Silver</strong> - Healthcare - public education &amp; awareness (2019)</li>
+              <li><strong>Silver</strong> - Integrated (2019)</li>
+              <li><strong>Silver</strong> - PR - charities &amp; non-profit (2019)</li>
+              <li><strong>Silver</strong> - Print and Outdoor - calligraphy (2019)</li>
+              <li><strong>Bronze</strong> - Creative Strategy (2020/2021)</li>
+              <li><strong>Bronze</strong> - Design - Typography (2019)</li>
+              <li><strong>Bronze</strong> - Direct - Ambient media: small scale (2019)</li>
+              <li><strong>Bronze</strong> - Brand experience - Charities &amp; non-profit (2019)</li>
+              <li><strong>Bronze</strong> - <strong>Young Lynx</strong> intergrated winner (2019)</li>
+              <li><strong>Bronze</strong> - Sound design (2017)</li>
+              <li><strong>Bronze</strong> - Sound design (2017)</li>
+              <li><strong>5 shortlists</strong> - Film</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>CANNES LIONS</h3>
+            <ul>
+              <li><strong>Silver Lion</strong> / Brand Activation (2020/2021)</li>
+              <li><strong>Bronze Lion</strong> / Brand Experience (2020/2021)</li>
+              <li><strong>Bronze Lion</strong> / Brand Experience (2019)</li>
+              <li><strong>4 shortlists</strong> / (2020/21)</li>
+              <li><strong>18 shortlists /</strong> (2019)</li>
+              <li><strong>1 shortlist</strong> / (2017)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>D&amp;AD IMPACT</h3>
+            <ul>
+              <li><strong>1 Wood Pencil</strong> / Diversity &amp; Equality (2017)</li>
+              <li><strong>1 Wood Pencil</strong> / Civic Engagement (2017)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>CLIO AWARDS</h3>
+            <ul>
+              <li><strong>Silver</strong> / Integrated Campaign (2019)</li>
+              <li><strong>Silver</strong> / Integrated Campaign (Health &amp; Wellness) (2019)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>LOERIES</h3>
+            <ul>
+              <li><strong>Gold</strong> - Design Craft - Typography (2020)</li>
+              <li><strong>Silver</strong> - Brand Identity &amp; Collateral Design - Logos (2019)</li>
+              <li><strong>Craft Certificate</strong> - OOH Crafts - Typography (2019)</li>
+              <li><strong>Bronze</strong> - PR and Media Communication (2020)</li>
+              <li><strong>Bronze</strong> - Integrated Campaign (2019)</li>
+              <li><strong>1 shortlist</strong> - Digital - Social Media (2019)</li>
+              <li><strong>2 Shortlist</strong> - Print craft (2016)</li>
+              <li><strong>2 Shortlist</strong> - Digital and Interactive (2016/2017)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>AD STARS</h3>
+            <ul>
+              <li><strong>Silver</strong> - Healthcare (2020)</li>
+              <li><strong>Bronze</strong> - Charity (2020)</li>
+              <li><strong>Crystal</strong> - Brand Experience (2020)</li>
+              <li><strong>Silver</strong> - Public affairs &amp; lobbying (2019)</li>
+              <li><strong>Bronze</strong> - Direct (2019)</li>
+              <li><strong>Bronze</strong> - Gender Equality (2019)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>EFFIES MENA</h3>
+            <ul>
+              <li><strong>Gold</strong> - Small Budgets: Service (2021)</li>
+              <li><strong>Bronze</strong> - Small Budgets: Services (2021)</li>
+              <li><strong>Crystal</strong> - SME Recognition Award (2019)</li>
+              <li><strong>Silver</strong> - Small Budgets: Services (2019)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>ONE SHOW</h3>
+            <ul>
+              <li><strong>Shortlist</strong> - Typography — Dynamic / In Motion (2020)</li>
+              <li><strong>Shortlist</strong> - Cultural Driver (2020)</li>
+              <li><strong>Shortlist</strong> - Public relations (2020)</li>
+              <li><strong>Shortlist</strong> - User-generated content (2018)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>NEW YORK FESTIVALS</h3>
+            <ul>
+              <li><strong>AME Platinum</strong> - Creativity with Positive Impact - Promotion of Health &amp; Human Services (2020)</li>
+              <li><strong>AME Gold</strong> - Creativity with Positive Impact - Promotion of Health &amp; Human Services (2020)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>L&uuml;RZER'S ARCHIVE</h3>
+            <ul>
+              <li><strong>7 published</strong> (2018)</li>
+            </ul>
+          </div>
+
+          <div class="award-group">
+            <h3>FESTIVAL JUDGING</h3>
+            <ul>
+              <li><strong>New York Festivals</strong> (2020 &amp; 2023)</li>
+              <li><strong>Le Book</strong> (2022)</li>
+              <li><strong>Le Book</strong> (2024)</li>
+              <li><strong>AdStars</strong> (2024)</li>
+              <li><strong>AdStars</strong> (2025)</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="education-section">
+      <div class="education-layout">
+        <div class="education-header">Education:</div>
+        <div class="education-list">
+          <div class="education-item">
+            <div class="school">Vega the Brand Communications School <span>(South Africa)</span></div>
+            <p class="detail">- BA Creative Branding &amp; Visual Communications majoring in art direction.</p>
+          </div>
+          <div class="education-item">
+            <div class="school">VCU Brandcenter <span>(USA)</span></div>
+            <p class="detail">- Short course</p>
+            <p class="detail">- Think Like A CMO Program</p>
+          </div>
+          <div class="education-item">
+            <div class="school">The Met Film School Berlin <span>(Germany)</span></div>
+            <p class="detail">- Short course</p>
+            <p class="detail">- intensive film studies.</p>
+          </div>
+          <div class="education-item">
+            <div class="school">Durban Girls' College <span>(South Africa)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="about-section" class="page-section">
+    <h1 class="about-header">About me</h1>
+    <img src="./assets/Tas photo.webp" alt="Taskeen Limalia" style="display:block; margin-top:2rem; max-width:500px; width:100%; border-radius:4px;" />
+
+    <div style="max-width:700px; margin-top:2.5rem; font-family:'Montserrat', system-ui, sans-serif; font-size:1.05rem; line-height:1.7; color:#333;">
+      <p>Hey, I'm Taskeen, a Creative Director from South Africa, now based in NYC. I got my start over a decade ago at Vega, and since then, I've been lucky enough to work across South Africa, Europe, the Middle East, and now the U.S. Travel's always been a big part of my life, and getting to mix that with the creative world has been a dream—collaborating with amazing people, agencies, and brands along the way. It's been a bit of a ride, but I wouldn't have it any other way. ✨🌍</p>
+
+      <p>What I love most about this industry is the belief that bold ideas can actually shift things. That's what keeps me going—finding ways to make creative work that's not just clever, but purposeful. Over the years, I've been lucky to have work recognized at Cannes Lions, D&amp;AD, Clios, and more. In 2019, I landed the #3 Art Director spot in the Middle East and North Africa via the B&amp;W Report. Some proud moments? Getting the Zero Tolerance Ribbon featured at the UN, helping set a blood donation record in Lebanon, igniting convos around gender equality, and picking up 3 D&amp;AD pencils for a refugee awareness campaign made on a $500 budget. Also proud (ish): eating 50 Ferrero Rochers in one shoot day. Regret? Yes. Worth it? Still deciding.</p>
+    </div>
+
+    <div style="max-width:700px; margin-top:2rem; font-family:'Montserrat', system-ui, sans-serif; font-size:1rem; line-height:1.8; color:#333;">
+      <p>Find me on LinkedIn - <a href="https://www.linkedin.com/in/taskeen-limalia-319b443a/" target="_blank" style="font-weight:700; color:#333;">https://www.linkedin.com/in/taskeen-limalia-319b443a/</a></p>
+    </div>
+
+    <div style="max-width:700px; margin-top:2rem; font-family:'Montserrat', system-ui, sans-serif; font-weight:200; font-size:1.8rem; line-height:1.8; color:#333;">
+      <p style="margin:0;">Contact me:</p>
+      <p style="margin:0;">taskeen17@gmail.com</p>
+      <p style="margin:0;">Instagram: @taskeeners</p>
+      <p style="margin:0;">Twitter: @taskeeners</p>
+    </div>
+  </div>
+
   <div id="root"></div>
   <script type="module" src="./main.js"></script>
+  <script>
+    document.querySelectorAll('#top-nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = link.getAttribute('href');
+
+        // Update active nav link
+        document.querySelectorAll('#top-nav a').forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+
+        // Toggle sections
+        const resumeSection = document.getElementById('resume-section');
+        const aboutSection = document.getElementById('about-section');
+        const root = document.getElementById('root');
+
+        resumeSection.classList.remove('visible');
+        aboutSection.classList.remove('visible');
+        root.style.display = '';
+
+        if (target === '#resume') {
+          resumeSection.classList.add('visible');
+          root.style.display = 'none';
+        } else if (target === '#about') {
+          aboutSection.classList.add('visible');
+          root.style.display = 'none';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
