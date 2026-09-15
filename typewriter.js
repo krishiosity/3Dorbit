@@ -14,6 +14,7 @@ const CSS = `
   gap: 12px;
   pointer-events: none;
   box-sizing: border-box;
+  transition: opacity 0.4s ease;
 }
 .typeLine {
   display: flex;
@@ -55,7 +56,7 @@ const CSS = `
   50%, 100% { opacity: 0; }
 }
 @media (max-width: 520px) {
-  #typeStack { bottom: 30%; gap: 9px; width: 100%; padding: 0 14px; }
+  #typeStack { bottom: 18%; gap: 9px; width: 100%; padding: 0 14px; }
   .typeLine.name { letter-spacing: 0.12em; font-size: clamp(15px, 5.4vw, 26px); }
   .typeLine.role { letter-spacing: 0.24em; font-size: clamp(8px, 2.4vw, 11px); }
 }

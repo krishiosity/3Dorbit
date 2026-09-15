@@ -4,6 +4,7 @@ import { readViewport, TILT_MIN, TILT_MAX } from './viewport.js';
 import { makeOrbitPlaceholder } from './placeholder.js';
 import { cutout, maxWorkingSide } from './cutout.js';
 import { createKeyerPool } from './keyerclient.js';
+import { createShelfRig } from './shelf.js';
 
 // One entry per card: path + key params tuned for THAT specific image.
 // bg: 'white' = key against white/light border sample (default)
@@ -434,6 +435,15 @@ export function createOrbitScene(container, loadCounter) {
 
   const scene = new THREE.Scene();
 
+  // Lights needed for shelf wood (MeshStandardMaterial)
+  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
+  keyLight.position.set(4, 8, 6);
+  scene.add(keyLight);
+  const fillLight = new THREE.DirectionalLight(0xffffff, 0.35);
+  fillLight.position.set(-5, -2, -4);
+  scene.add(fillLight);
+
   const camera = new THREE.PerspectiveCamera(45, vp.aspect, 0.1, 200);
   const target = new THREE.Vector3(0, vp.lift, 0);
 
@@ -451,6 +461,8 @@ export function createOrbitScene(container, loadCounter) {
   let dist = vp.dist;
   let radius = vp.radius;
   let cardH = vp.cardH;
+  let mode = vp.mode || 'orbit';
+  let shelf = null;
 
   // Slots are allocated for ALL cards up front, so ring geometry is fixed
   // from frame one and each texture drops into its reserved position as it
@@ -460,6 +472,10 @@ export function createOrbitScene(container, loadCounter) {
   let filled = 0;
 
   function placeCards() {
+    if (shelf) {
+      layoutShelfSizes();
+      return;
+    }
     const n = planes.length;
     for (let i = 0; i < n; i++) {
       const p = planes[i];
@@ -469,6 +485,71 @@ export function createOrbitScene(container, loadCounter) {
       const h = cardH;
       const w = h * p.aspect;
       p.mesh.scale.set(w, h, 1);
+    }
+  }
+
+  // --- Shelf mode ---------------------------------------------------------
+  function buildShelf() {
+    if (shelf) return;
+    shelf = createShelfRig(ring, planes.length, {
+      rows: vp.shelfRows,
+      gap: vp.shelfGap,
+      rowHeight: vp.shelfRowH
+    });
+    // Reparent card meshes into shelf group and assign slots
+    for (let i = 0; i < planes.length; i++) {
+      const p = planes[i];
+      if (!p) continue;
+      const slot = shelf.slots[i];
+      if (!slot) continue;
+      p.shelfRow = slot.row;
+      p.shelfSlot = slot.slot;
+      ring.remove(p.mesh);
+      shelf.group.add(p.mesh);
+      p.mesh.rotation.set(0, 0, 0);
+
+      // Create contact shadow
+      const shadow = shelf.makeShadow();
+      shelf.group.add(shadow);
+      p.shadow = shadow;
+    }
+    layoutShelfSizes();
+  }
+
+  function teardownShelf() {
+    if (!shelf) return;
+    for (const p of planes) {
+      if (!p) continue;
+      shelf.group.remove(p.mesh);
+      ring.add(p.mesh);
+      if (p.shadow) {
+        p.shadow.geometry.dispose();
+        p.shadow.material.dispose();
+        p.shadow.parent?.remove(p.shadow);
+        p.shadow = null;
+      }
+    }
+    shelf.dispose();
+    shelf = null;
+  }
+
+  function layoutShelfSizes() {
+    if (!shelf) return;
+    const maxH = shelf.cfg.rowHeight * 0.74;
+    const maxW = shelf.cfg.gap * 0.92;
+    for (const p of planes) {
+      if (!p) continue;
+      let h = cardH;
+      h = Math.min(h, maxH);
+      let w = h * p.aspect;
+      if (w > maxW) { w = maxW; h = w / Math.max(p.aspect, 0.001); }
+      p.shelfW = w;
+      p.shelfH = h;
+      p.mesh.scale.set(w, h, 1);
+      p.mesh.position.y = h / 2;
+      if (p.shadow) {
+        p.shadow.scale.set(w * 1.15, 1, w * 0.42);
+      }
     }
   }
 
@@ -499,8 +580,20 @@ export function createOrbitScene(container, loadCounter) {
 
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
     mesh.scale.set(0.0001, 0.0001, 1);
-    ring.add(mesh);
-    planes[i] = { mesh, aspect: aspect || 1, fade: 1 };
+
+    const parent = shelf ? shelf.group : ring;
+    parent.add(mesh);
+    const entry = { mesh, aspect: aspect || 1, fade: 1, shelfRow: 0, shelfSlot: 0, shelfW: 0, shelfH: 0, shadow: null };
+
+    if (shelf && shelf.slots[i]) {
+      entry.shelfRow = shelf.slots[i].row;
+      entry.shelfSlot = shelf.slots[i].slot;
+      const shadow = shelf.makeShadow();
+      shelf.group.add(shadow);
+      entry.shadow = shadow;
+    }
+
+    planes[i] = entry;
 
     // Upload immediately, then release the source. An ImageBitmap holds
     // decoded pixels outside the JS heap, and sixteen of them alive at once
@@ -602,6 +695,15 @@ export function createOrbitScene(container, loadCounter) {
     camera.aspect = next.aspect;
     camera.updateProjectionMatrix();
     renderer.setSize(next.width, next.height);
+
+    // Switch layout mode if breakpoint crossed
+    const nextMode = next.mode || 'orbit';
+    if (nextMode !== mode) {
+      mode = nextMode;
+      if (mode === 'shelf') buildShelf();
+      else teardownShelf();
+    }
+
     placeCards();
     applyCamera();
   }
@@ -623,41 +725,74 @@ export function createOrbitScene(container, loadCounter) {
   function update(drag) {
     if (drag) {
       if (drag.state.dragging) {
-        spinVel += drag.state.velocity * 2.4;
-        tilt = Math.max(
-          TILT_MIN,
-          Math.min(TILT_MAX, tilt + drag.state.velocityY * 1.6)
-        );
+        spinVel += drag.state.velocity * (shelf ? 3.4 : 2.4);
+        if (!shelf) {
+          tilt = Math.max(
+            TILT_MIN,
+            Math.min(TILT_MAX, tilt + drag.state.velocityY * 1.6)
+          );
+        }
       }
     }
-    spinVel += (0 - spinVel) * 0.06;
-    if (!paused) spin += spinVel + 0.0016;
-    ring.rotation.y = spin;
+    spinVel += (0 - spinVel) * (shelf ? 0.12 : 0.06);
+    if (Math.abs(spinVel) < 0.00002) spinVel = 0;
 
-    // Skip the draw when nothing is moving and every card has finished
-    // fading in. On a phone this drops the scene from a continuous 60fps
-    // GPU load to near-idle whenever the user isn't touching it — the single
-    // biggest battery and thermal win, and thermal throttling is what makes
-    // the ring stutter after a minute on screen.
     let animating = Math.abs(spinVel) > 0.00004;
-    for (let i = 0; i < planes.length; i++) {
-      if (planes[i] && planes[i].fade < 1) { animating = true; break; }
-    }
 
-    // Cards always face the camera. Each also eases in from nothing as it
-    // lands, so a card appearing mid-spin reads as arriving rather than
-    // popping into existence.
-    for (let i = 0; i < planes.length; i++) {
-      const p = planes[i];
-      if (!p) continue;
-      p.mesh.rotation.y = -spin;
-      if (p.fade < 1) {
-        p.fade = Math.min(1, p.fade + 0.06);
-        const e = 1 - Math.pow(1 - p.fade, 3);
-        p.mesh.material.opacity = e;
-        const h = cardH;
-        const w = h * p.aspect;
-        p.mesh.scale.set(w * (0.86 + e * 0.14), h * (0.86 + e * 0.14), 1);
+    if (shelf) {
+      // Shelf mode: scroll each row
+      ring.rotation.y = 0;
+      const flow = paused ? 0 : 1;
+      const dt = 1 / 60; // approximate
+
+      for (const r of shelf.rows) {
+        r.offset += (spinVel * 9 + r.drift * 0.35 * dt) * flow;
+      }
+
+      for (let i = 0; i < planes.length; i++) {
+        const p = planes[i];
+        if (!p) continue;
+        const r = shelf.rows[p.shelfRow];
+        if (!r) continue;
+        const x = shelf.slotX(r, p.shelfSlot);
+        const fade = shelf.edgeFade(x, r);
+
+        p.mesh.position.set(x, p.shelfH / 2, shelf.cfg.depth);
+        p.mesh.position.y += r.y;
+        p.mesh.rotation.y = 0;
+        p.mesh.material.opacity = fade;
+
+        if (p.shadow) {
+          p.shadow.position.set(x, r.y + 0.012, shelf.cfg.depth + 0.05);
+          p.shadow.material.opacity = fade * 0.85;
+        }
+
+        if (p.fade < 1) {
+          p.fade = Math.min(1, p.fade + 0.06);
+          animating = true;
+        }
+      }
+    } else {
+      // Orbit mode
+      if (!paused) spin += spinVel + 0.0016;
+      ring.rotation.y = spin;
+
+      for (let i = 0; i < planes.length; i++) {
+        if (planes[i] && planes[i].fade < 1) { animating = true; break; }
+      }
+
+      for (let i = 0; i < planes.length; i++) {
+        const p = planes[i];
+        if (!p) continue;
+        p.mesh.rotation.y = -spin;
+        if (p.fade < 1) {
+          p.fade = Math.min(1, p.fade + 0.06);
+          const e = 1 - Math.pow(1 - p.fade, 3);
+          p.mesh.material.opacity = e;
+          const h = cardH;
+          const w = h * p.aspect;
+          p.mesh.scale.set(w * (0.86 + e * 0.14), h * (0.86 + e * 0.14), 1);
+        }
       }
     }
 
@@ -667,6 +802,9 @@ export function createOrbitScene(container, loadCounter) {
   }
 
   applyCamera();
+
+  // Build shelf immediately if the page opened on a phone.
+  if (mode === 'shelf') buildShelf();
 
   function dispose() {
     for (const p of planes) {

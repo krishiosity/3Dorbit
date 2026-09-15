@@ -118,14 +118,53 @@ export function readViewport() {
   // while letting the interaction work in degrees.
   const restTilt = Math.atan2(elevation, clampedDist);
 
+  // --- Phone shelf framing ------------------------------------------------
+  const shelfGap = 2.35;
+  const shelfRowH = 2.5;
+  const shelfRows = 3;
+
+  if (isPhone) {
+    const vFovR = 45 * (Math.PI / 180);
+    const hFovR = 2 * Math.atan(Math.tan(vFovR / 2) * aspect);
+    const shelfHalfW = (7 * shelfGap) / 2 + 1.2;
+    const shelfHalfH = (shelfRows * shelfRowH) / 2 + 0.6;
+    const shelfDistW = shelfHalfW / Math.tan(hFovR / 2);
+    const shelfDistH = shelfHalfH / Math.tan(vFovR / 2);
+    const shelfDist = Math.max(shelfDistW, shelfDistH) * 1.1;
+    const shelfLift = -1.4;
+
+    return {
+      width: w,
+      height: h,
+      aspect,
+      isPhone,
+      isTablet,
+      mode: 'shelf',
+      radius,
+      cardH: BASE_CARD_H * 1.25,
+      shelfGap,
+      shelfRowH,
+      shelfRows,
+      lift: shelfLift,
+      elevation: 0,
+      restTilt: 0,
+      dist: Math.max(8, Math.min(46, shelfDist)),
+      camY: shelfLift
+    };
+  }
+
   return {
     width: w,
     height: h,
     aspect,
     isPhone,
     isTablet,
+    mode: 'orbit',
     radius,
     cardH,
+    shelfGap,
+    shelfRowH,
+    shelfRows,
     lift,
     elevation,
     restTilt,

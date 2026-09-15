@@ -256,16 +256,19 @@
       transition: transform 0.3s ease;
       cursor: pointer;
     }
-    .project-tile img.tile-thumb {
+    .project-tile img.tile-thumb,
+    .project-tile iframe.tile-thumb {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border: none;
     }
     .project-tile .tile-overlay {
       position: absolute;
       inset: 0;
+      background: rgba(0, 0, 0, 0.55);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -325,6 +328,27 @@
       padding: 0.6rem 1.2rem;
       cursor: pointer;
       transition: background 0.2s;
+    }
+    .project-detail-header {
+      max-width: 900px;
+      margin: 4rem auto 2rem;
+      padding: 0 2rem;
+      text-align: center;
+    }
+    .project-detail-title {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 2.4rem;
+      color: #171514;
+      margin: 0 0 1rem;
+    }
+    .project-detail-desc {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #555;
+      margin: 0;
     }
     .project-detail-back:hover {
       background: rgba(240,240,240,0.95);
@@ -447,7 +471,7 @@
   <div id="work-section">
     <div class="projects-grid">
       <div class="project-tile" data-project="1" style="background:#1a1a1a;">
-        <img class="tile-thumb" src="./Projects/TJ Maxx Holiday Campaign/thumbnail.png" alt="TJ Maxx Holiday Campaign" />
+        <img class="tile-thumb" src="https://img.youtube.com/vi/0az8tM38KD8/maxresdefault.jpg" alt="TJ Maxx Holiday Campaign" />
         <div class="tile-overlay">
           <div>
             <span class="project-title">TJ Maxx Holiday Campaign</span>
@@ -456,7 +480,8 @@
         </div>
       </div>
       <div class="project-tile" data-project="2" style="background:#7ABCCE;">
-        <div class="tile-overlay" style="opacity:1;">
+        <img class="tile-thumb" src="./Projects/The Zero Tolerance Ribbon/Thumbnail.png" alt="The Zero Tolerance Ribbon" />
+        <div class="tile-overlay">
           <div>
             <span class="project-title">The Zero Tolerance Ribbon</span>
             <div class="project-subtitle">&mdash; view &mdash;</div>
@@ -468,24 +493,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">IKEA Wireless Charging Furniture</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
-          </div>
-        </div>
-      </div>
-      <div class="project-tile" data-project="4" style="background:#1a2a3a;">
-        <img class="tile-thumb" src="./Projects/Vodafone - Online Film/thumbnail.png" alt="Vodafone - Online Film" />
-        <div class="tile-overlay">
-          <div>
-            <span class="project-title">Vodafone - Online Film</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
-          </div>
-        </div>
-      </div>
-      <div class="project-tile" data-project="5" style="background:#2a1a1a;">
-        <img class="tile-thumb" src="./Projects/TJMAXX/thumbnail.png" alt="TJMAXX" />
-        <div class="tile-overlay">
-          <div>
-            <span class="project-title">TJMAXX</span>
             <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
@@ -553,15 +560,6 @@
           </div>
         </div>
       </div>
-      <div class="project-tile" data-project="13" style="background:#e8e8e8;">
-        <img class="tile-thumb" src="./Projects/Lighthouse - Unspoken UAE Case Study/thumbnail.png" alt="Lighthouse - Unspoken, UAE" />
-        <div class="tile-overlay">
-          <div>
-            <span class="project-title">Lighthouse - Unspoken, UAE</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
-          </div>
-        </div>
-      </div>
       <div class="project-tile" data-project="14" style="background:#111;">
         <img class="tile-thumb" src="./Projects/Sahara Shelter - Print/thumbnail.png" alt="Sahara Shelter - Print" />
         <div class="tile-overlay">
@@ -585,15 +583,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">VW - Think Big</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
-          </div>
-        </div>
-      </div>
-      <div class="project-tile" data-project="17" style="background:#1a1020;">
-        <img class="tile-thumb" src="./Projects/Qatar Airways Privilege Club/thumbnail.png" alt="Qatar Airways Privilege Club" />
-        <div class="tile-overlay">
-          <div>
-            <span class="project-title">Qatar Airways Privilege Club</span>
             <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
@@ -639,15 +628,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Vodafone - Radio</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
-          </div>
-        </div>
-      </div>
-      <div class="project-tile" data-project="23" style="background:#1a1a2a;">
-        <img class="tile-thumb" src="./Projects/Qatar Airways Privilege Club Film/thumbnail.png" alt="Qatar Airways Privilege Club" />
-        <div class="tile-overlay">
-          <div>
-            <span class="project-title">Qatar Airways Privilege Club</span>
             <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
@@ -921,51 +901,108 @@
       workSection.classList.remove('hidden');
       document.body.classList.remove('no-scroll');
 
+      const typeStack = document.getElementById('typeStack');
+
       if (target === '#work') {
         // Show orbit + grid below (scrollable)
         // root visible, work-section visible, body scrollable
+        // Name visibility handled by scroll listener
       } else if (target === '#resume') {
         workSection.classList.add('hidden');
         resumeSection.classList.add('visible');
         root.style.visibility = 'hidden';
         root.style.pointerEvents = 'none';
         document.body.classList.add('no-scroll');
+        if (typeStack) { typeStack.style.opacity = '0'; typeStack.style.pointerEvents = 'none'; }
       } else if (target === '#about') {
         workSection.classList.add('hidden');
         aboutSection.classList.add('visible');
         root.style.visibility = 'hidden';
         root.style.pointerEvents = 'none';
         document.body.classList.add('no-scroll');
+        if (typeStack) { typeStack.style.opacity = '0'; typeStack.style.pointerEvents = 'none'; }
+      }
+
+      // Restore name when returning to orbit home view
+      if (target === '#work' || target === '#home') {
+        if (typeStack) { typeStack.style.opacity = '1'; typeStack.style.pointerEvents = ''; }
       }
 
       window.scrollTo(0, 0);
     }
 
-    // Project data: maps project id to its case study images (hover overlays excluded)
+    // Project descriptions
+    const projectDescriptions = {
+      '1': { title: 'TJ Maxx Holiday Campaign', desc: 'This holiday season, TJ Maxx is all about that one person who pours heart into every gift and sprinkles holiday cheer like 24k Magic wherever she goes.' },
+      '2': { title: 'The Zero Tolerance Ribbon', desc: 'The Zero Tolerance Ribbon is a symbol of collective support against FGM. 480M global media impressions, 500 pledges made in the first month, 35 global NGOs adopted the symbol, 7 countries officially used the ribbon. Presented at CSW 2019.' },
+      '3': { title: 'IKEA Wireless Charging Furniture', desc: 'At IKEA, as you know, we don\'t like charging much. But for once, we decided to charge a lot. IKEA now has a range of furniture that can charge your smart phone by simply placing it on the surface, without the mess of cables. We came up with a campaign that resembles that critical moment when your phone is running out of battery, using the dreaded low-battery warning sign to catch people\'s attention.' },
+      '6': { title: 'Blood Unity', desc: '' },
+      '7': { title: 'ANA - Young Lynx Gold Winner', desc: 'Ana falls under the Friends of Cancer Patients\' umbrella "Kasht" and is a childhood cancer initiative that seeks to raise awareness about the seven early warning signs of childhood cancer. In a digitally driven world led by mobile mania, we are inundated with notifications every day that are often left ignored or unseen. We chose to highlight how easy it might be to overlook the warning signs of persistent early cancer symptoms by likening it to this reality.' },
+      '8': { title: 'UNHCR x Reddit - Digital', desc: 'The Syrian refugee crisis has left several in the kind of situation no human being deserves to be in. Some Redditors decided to hold a Photoshop battle imagining six-year-old Zahra in several more nicer places than the settlement she is forced to spend her childhood in. This one inspired people to donate via UNHCR\'s page to help put her in these places for real.' },
+      '9': { title: 'AstraZeneca - Neb Adventures', desc: '' },
+      '10': { title: 'Faux or Foe', desc: '' },
+      '11': { title: 'Lighthouse - Unspoken, UAE', desc: '' },
+      '12': { title: 'Invitae - Boxes', desc: 'Invitae believes there\'s a wealth of knowledge packed into a box. Some boxes offer glimpses into the past, while others illuminate future possibilities. The Invitae box unveils insights into your health based on your DNA, giving you the autonomy to decide what steps to take next.' },
+      '14': { title: 'Sahara Shelter - Print', desc: 'The hands crossing the girls\' face symbolize how they are being repressed and controlled. The women have no choice in the matter and are forced to abide by rules set by hands around them. The hands represent the limitations of freedom of thought and speech, and are symbolic of male domination of women in these countries.' },
+      '15': { title: 'International Bank of Qatar', desc: '' },
+      '16': { title: 'VW - Think Big', desc: 'In 1959, Volkswagen changed peoples perceptions and told them to \'think small\'. In 2017, in Saudi Arabia we celebrate that we\'re finally starting to think big. This may seem like a small achievement for some, but for us it\'s a big one.' },
+      '18': { title: 'Mastercard - Stand Up To Cancer', desc: '' },
+      '19': { title: 'New Gallery', desc: '' },
+      '20': { title: 'Unilever - Print (Handy Andy)', desc: 'You can bet that the cracks and gaps in your floors and walls are clogged with dirt and grime, even though your home may look clean. We needed to remind the public that Handy Andy is tough enough to \'clean every inch\' of your home. These visuals communicate the benefit of the product by leading the viewer to think they are looking at a sprawling, paradise landscape — but the item subtly included tells the viewer that this is in fact in a tiny space in the home.' },
+      '21': { title: 'Vodafone - Qatar National Day', desc: '' },
+      '22': { title: 'Vodafone - Radio', desc: '' },
+    };
+
+    // Project media: each item has type (image|video|link), src, label, and optional thumb
     const projectData = {
-      '1': ['./Projects/TJ Maxx Holiday Campaign/Project info.png', 'youtube:oNyWTaIy-HU'],
-      '2': ['./Projects/The Zero Tolerance Ribbon/project info.png', './Projects/The Zero Tolerance Ribbon/project info2.png', './Projects/The Zero Tolerance Ribbon/project info3.png'],
-      '3': ['./Projects/IKEA Wireless Charging Furniture/project info.png', './Projects/IKEA Wireless Charging Furniture/project info2.png'],
-      '4': ['./Projects/Vodafone - Online Film/project info.png', './Projects/Vodafone - Online Film/project info2.png'],
-      '5': ['./Projects/TJMAXX/project info2.png'],
-      '6': ['./Projects/Blood Unity/project info2.png'],
-      '7': ['./Projects/ANA - Young Lynx Gold Winner/project info2.png'],
-      '8': ['./Projects/UNHCR x Reddit - Digital/project info2.png', './Projects/UNHCR x Reddit - Digital/project info3.png'],
-      '9': ['./Projects/AstraZeneca - Neb Adventures/project info2.png'],
+      '1': [
+        { type: 'video', src: 'youtube:0az8tM38KD8', label: 'Holiday Campaign Film', thumb: 'https://img.youtube.com/vi/0az8tM38KD8/maxresdefault.jpg' }
+      ],
+      '2': [
+        { type: 'image', src: './Projects/The Zero Tolerance Ribbon/project info.png', label: 'Campaign Overview' },
+        { type: 'image', src: './Projects/The Zero Tolerance Ribbon/project info2.png', label: 'Ribbon Design Breakdown' },
+        { type: 'image', src: './Projects/The Zero Tolerance Ribbon/project info3.png', label: 'Campaign Results' }
+      ],
+      '3': [
+        { type: 'image', src: './Projects/IKEA Wireless Charging Furniture/project info.png', label: 'Campaign Concept' },
+        { type: 'image', src: './Projects/IKEA Wireless Charging Furniture/project info2.png', label: 'Digital Execution' }
+      ],
+      '6': [
+        { type: 'image', src: './Projects/Blood Unity/project info2.png', label: 'Blood Unity Film' }
+      ],
+      '7': [
+        { type: 'image', src: './Projects/ANA - Young Lynx Gold Winner/project info2.png', label: 'Case Study' }
+      ],
+      '8': [
+        { type: 'image', src: './Projects/UNHCR x Reddit - Digital/project info2.png', label: 'Campaign Story' },
+        { type: 'image', src: './Projects/UNHCR x Reddit - Digital/project info3.png', label: 'Results & Awards' }
+      ],
+      '9': [
+        { type: 'image', src: './Projects/AstraZeneca - Neb Adventures/project info2.png', label: 'Neb Adventures Film' }
+      ],
       '10': [],
-      '11': [],
+      '11': [
+        { type: 'image', src: './Projects/Lighthouse - Unspoken UAE/project info2.png', label: 'Unspoken Film' }
+      ],
       '12': [],
-      '13': ['./Projects/Lighthouse - Unspoken UAE Case Study/project info2.png'],
-      '14': ['./Projects/Sahara Shelter - Print/project info2.png'],
-      '15': ['./Projects/International Bank of Qatar/project info2.png'],
-      '16': ['./Projects/VW - Think Big/project info2.png'],
-      '17': ['./Projects/Qatar Airways Privilege Club/project info2.png'],
-      '18': ['./Projects/Mastercard - Stand Up To Cancer/project info2.png', 'youtube:5Kyv15kX8IA'],
+      '14': [
+        { type: 'image', src: './Projects/Sahara Shelter - Print/project info2.png', label: 'Print Campaign' }
+      ],
+      '15': [
+        { type: 'image', src: './Projects/International Bank of Qatar/project info2.png', label: 'Brand Film' }
+      ],
+      '16': [
+        { type: 'image', src: './Projects/VW - Think Big/project info2.png', label: 'Think Big Campaign' }
+      ],
+      '18': [
+        { type: 'image', src: './Projects/Mastercard - Stand Up To Cancer/project info2.png', label: 'Campaign with Jennifer Hudson' }
+      ],
       '19': [],
-      '20': ['./Projects/Unilever - Print Handy Andy/project info2.png'],
+      '20': [
+        { type: 'image', src: './Projects/Unilever - Print Handy Andy/project info2.png', label: 'Print Craft' }
+      ],
       '21': [],
       '22': [],
-      '23': []
     };
 
     // All project tile data for building the grid
@@ -973,8 +1010,6 @@
       { id: '1', title: 'TJ Maxx Holiday Campaign', thumb: './Projects/TJ Maxx Holiday Campaign/thumbnail.png', bg: '#1a1a1a' },
       { id: '2', title: 'The Zero Tolerance Ribbon', thumb: null, bg: '#7ABCCE' },
       { id: '3', title: 'IKEA Wireless Charging Furniture', thumb: './Projects/IKEA Wireless Charging Furniture/thumbnail.png', bg: '#111' },
-      { id: '4', title: 'Vodafone - Online Film', thumb: './Projects/Vodafone - Online Film/thumbnail.png', bg: '#1a2a3a' },
-      { id: '5', title: 'TJMAXX', thumb: './Projects/TJMAXX/thumbnail.png', bg: '#2a1a1a' },
       { id: '6', title: 'Blood Unity', thumb: './Projects/Blood Unity/thumbnail.png', bg: '#1a1a1a' },
       { id: '7', title: 'ANA - Young Lynx Gold Winner', thumb: './Projects/ANA - Young Lynx Gold Winner/thumbnail.png', bg: '#d4c5b0' },
       { id: '8', title: 'UNHCR x Reddit - Digital', thumb: './Projects/UNHCR x Reddit - Digital/thumbnail.png', bg: '#f5f5f5' },
@@ -982,17 +1017,14 @@
       { id: '10', title: 'Faux or Foe', thumb: './Projects/Faux or Foe/thumbnail.png', bg: '#3a0a0a' },
       { id: '11', title: 'Lighthouse - Unspoken, UAE', thumb: './Projects/Lighthouse - Unspoken UAE/thumbnail.png', bg: '#f0f0f0' },
       { id: '12', title: 'Invitae - Boxes', thumb: './Projects/Invitae - Boxes/thumbnail.png', bg: '#2a2a4a' },
-      { id: '13', title: 'Lighthouse - Unspoken, UAE', thumb: './Projects/Lighthouse - Unspoken UAE Case Study/thumbnail.png', bg: '#e8e8e8' },
       { id: '14', title: 'Sahara Shelter - Print', thumb: './Projects/Sahara Shelter - Print/thumbnail.png', bg: '#111' },
       { id: '15', title: 'International Bank of Qatar', thumb: './Projects/International Bank of Qatar/thumbnail.png', bg: '#2a3a2a' },
       { id: '16', title: 'VW - Think Big', thumb: './Projects/VW - Think Big/thumbnail.png', bg: '#e0e0e0' },
-      { id: '17', title: 'Qatar Airways Privilege Club', thumb: './Projects/Qatar Airways Privilege Club/thumbnail.png', bg: '#1a1020' },
       { id: '18', title: 'Mastercard - Stand Up To Cancer', thumb: './Projects/Mastercard - Stand Up To Cancer/thumbnail.png', bg: '#e87040' },
       { id: '19', title: 'New Gallery', thumb: './Projects/New Gallery/thumbnail.png', bg: '#d5cfc5' },
       { id: '20', title: 'Unilever - Print (Handy Andy)', thumb: './Projects/Unilever - Print Handy Andy/thumbnail.png', bg: '#4a5a3a' },
       { id: '21', title: 'Vodafone - Qatar National Day', thumb: './Projects/Vodafone - Qatar National Day/thumbnail.png', bg: '#2a1a10' },
-      { id: '22', title: 'Vodafone - Radio', thumb: './Projects/Vodafone - Radio/thumbnail.png', bg: '#1a1020' },
-      { id: '23', title: 'Qatar Airways Privilege Club', thumb: './Projects/Qatar Airways Privilege Club Film/thumbnail.png', bg: '#1a1a2a' }
+      { id: '22', title: 'Vodafone - Radio', thumb: './Projects/Vodafone - Radio/thumbnail.png', bg: '#1a1020' }
     ];
 
     function buildProjectGrid(currentId) {
@@ -1045,9 +1077,20 @@
       if (!images) return;
 
       container.innerHTML = '';
-      images.forEach(src => {
-        if (src.startsWith('youtube:')) {
-          const videoId = src.split(':')[1];
+
+      // Add project title and description
+      const info = projectDescriptions[id];
+      if (info) {
+        const header = document.createElement('div');
+        header.className = 'project-detail-header';
+        header.innerHTML = '<h2 class="project-detail-title">' + info.title + '</h2>' +
+          (info.desc ? '<p class="project-detail-desc">' + info.desc + '</p>' : '');
+        container.appendChild(header);
+      }
+
+      images.forEach(item => {
+        if (item.type === 'video' && item.src.startsWith('youtube:')) {
+          const videoId = item.src.split(':')[1];
           const wrapper = document.createElement('div');
           wrapper.style.cssText = 'position:relative;width:100%;padding-bottom:56.25%;margin-bottom:0.5rem;';
           const iframe = document.createElement('iframe');
@@ -1057,10 +1100,17 @@
           iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
           wrapper.appendChild(iframe);
           container.appendChild(wrapper);
+        } else if (item.type === 'link') {
+          const a = document.createElement('a');
+          a.href = item.src;
+          a.target = '_blank';
+          a.textContent = item.label || item.src;
+          a.style.cssText = 'display:block;margin-bottom:0.5rem;color:#171514;font-family:Montserrat,sans-serif;';
+          container.appendChild(a);
         } else {
           const img = document.createElement('img');
-          img.src = src;
-          img.alt = 'Project detail';
+          img.src = item.src;
+          img.alt = item.label || 'Project detail';
           container.appendChild(img);
         }
       });
@@ -1074,6 +1124,8 @@
       document.getElementById('root').style.pointerEvents = 'none';
       document.body.classList.add('no-scroll');
       detail.scrollTop = 0;
+      const ts = document.getElementById('typeStack');
+      if (ts) { ts.style.opacity = '0'; ts.style.pointerEvents = 'none'; }
     }
 
     function closeProject() {
@@ -1083,12 +1135,23 @@
       document.getElementById('root').style.visibility = '';
       document.getElementById('root').style.pointerEvents = '';
       document.body.classList.remove('no-scroll');
+      const ts = document.getElementById('typeStack');
+      if (ts) { ts.style.opacity = '1'; ts.style.pointerEvents = ''; }
     }
 
     document.querySelectorAll('.project-tile[data-project]').forEach(tile => {
       tile.addEventListener('click', () => {
         openProject(tile.getAttribute('data-project'));
       });
+    });
+
+    // Hide name/role typewriter on scroll so it doesn't stay anchored
+    window.addEventListener('scroll', () => {
+      const typeStack = document.getElementById('typeStack');
+      if (typeStack) {
+        typeStack.style.opacity = window.scrollY > 50 ? '0' : '1';
+        typeStack.style.pointerEvents = window.scrollY > 50 ? 'none' : '';
+      }
     });
 
     document.querySelectorAll('#top-nav a').forEach(link => {
