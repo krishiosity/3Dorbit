@@ -16,11 +16,13 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       background: #ffffff;
-      overflow: hidden;
       font-family: 'Montserrat', system-ui, sans-serif;
       color: #171514;
+    }
+    body.no-scroll {
+      overflow: hidden;
     }
     /* Hide the native cursor, but ONLY where there is a pointer to replace.
        Applying this on touch devices is harmless for the cursor itself, yet
@@ -28,21 +30,16 @@
     @media (hover: hover) and (pointer: fine) {
       html, body, *, *::before, *::after { cursor: none !important; }
     }
-    /* Touch: never let a drag scroll or rubber-band the page instead of
-       spinning the ring. */
-    @media (hover: none), (pointer: coarse) {
-      html, body { overscroll-behavior: none; touch-action: none; }
-    }
     #root {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
       z-index: 0;
-      /* `100%` height resolves against a collapsed containing block in some
-         mobile browsers, leaving a zero-height canvas. Explicit viewport
-         units — with the dynamic variant where supported — avoid that. */
       width: 100vw;
       height: 100vh;
       height: 100dvh;
+      overscroll-behavior: none;
+      touch-action: none;
     }
     #root canvas { display: block; width: 100%; height: 100%; }
     /* Stop iOS from double-tap-zooming or showing a tap highlight when the
@@ -55,12 +52,14 @@
       top: 0;
       left: 0;
       right: 0;
-      z-index: 100;
+      z-index: 80;
       display: flex;
       justify-content: center;
       gap: 2.5rem;
       padding: 1.5rem 2rem;
       pointer-events: auto;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(8px);
     }
     #top-nav a {
       font-family: 'Montserrat', system-ui, sans-serif;
@@ -227,6 +226,192 @@
       margin: 0;
     }
 
+    /* Work / Projects grid */
+    #work-section {
+      display: block;
+      position: relative;
+      z-index: 10;
+      margin-top: 100vh;
+      background: #ffffff;
+      padding: 2rem 4rem 4rem;
+      box-sizing: border-box;
+    }
+    #work-section.hidden {
+      display: none;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .project-tile {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .project-tile img.tile-thumb {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .project-tile .tile-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .project-tile:hover .tile-overlay {
+      opacity: 1;
+    }
+    .project-tile .project-title {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 1.6rem;
+      color: #fff;
+      text-align: center;
+      padding: 0 1.5rem;
+    }
+    .project-tile .project-subtitle {
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.9);
+      margin-top: 0.6rem;
+    }
+
+    /* Project detail overlay */
+    #project-detail {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: #ffffff;
+      overflow-y: auto;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    #project-detail.visible {
+      display: block;
+    }
+    .project-detail-back {
+      position: fixed;
+      top: 1.5rem;
+      left: 2rem;
+      z-index: 95;
+      font-family: 'Montserrat', system-ui, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #171514;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 4px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .project-detail-back:hover {
+      background: rgba(240,240,240,0.95);
+    }
+    .project-detail-images {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2rem 4rem;
+    }
+    .project-detail-images img {
+      display: block;
+      width: 100%;
+      margin-bottom: 0.5rem;
+      border-radius: 2px;
+    }
+    .project-detail-grid {
+      max-width: 1400px;
+      margin: 3rem auto 0;
+      padding: 0 2rem 4rem;
+    }
+    .project-detail-grid .projects-grid {
+      gap: 4px;
+    }
+    .project-detail-grid .project-tile {
+      aspect-ratio: 16 / 10;
+    }
+
+    @media (max-width: 1024px) {
+      .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 620px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .page-section {
+        padding: 5rem 1.5rem 2rem;
+      }
+      #work-section {
+        padding: 1.5rem 1.5rem 2rem;
+      }
+      .experience-layout,
+      .awards-layout,
+      .education-layout {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+      }
+      .experience-header,
+      .awards-header,
+      .education-header {
+        font-size: 2rem;
+        min-width: unset;
+      }
+      .experience-list,
+      .awards-content,
+      .education-list {
+        align-items: center;
+      }
+      .experience-item,
+      .education-item {
+        align-items: center;
+      }
+      .award-group {
+        text-align: center;
+      }
+      .award-group ul {
+        align-items: center;
+      }
+      #about-section {
+        text-align: center;
+      }
+      #about-section img {
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+      #about-section div {
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+    }
+
     /* About Me section */
     #about-section {
       display: none;
@@ -259,6 +444,223 @@
     <a href="#resume">RÉSUMÉ</a>
     <a href="#about">ABOUT ME</a>
   </nav>
+  <div id="work-section">
+    <div class="projects-grid">
+      <div class="project-tile" data-project="1" style="background:#1a1a1a;">
+        <img class="tile-thumb" src="./Projects/TJ Maxx Holiday Campaign/thumbnail.png" alt="TJ Maxx Holiday Campaign" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">TJ Maxx Holiday Campaign</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="2" style="background:#7ABCCE;">
+        <div class="tile-overlay" style="opacity:1;">
+          <div>
+            <span class="project-title">The Zero Tolerance Ribbon</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="3" style="background:#111;">
+        <img class="tile-thumb" src="./Projects/IKEA Wireless Charging Furniture/thumbnail.png" alt="IKEA Wireless Charging Furniture" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">IKEA Wireless Charging Furniture</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="4" style="background:#1a2a3a;">
+        <img class="tile-thumb" src="./Projects/Vodafone - Online Film/thumbnail.png" alt="Vodafone - Online Film" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Vodafone - Online Film</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="5" style="background:#2a1a1a;">
+        <img class="tile-thumb" src="./Projects/TJMAXX/thumbnail.png" alt="TJMAXX" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">TJMAXX</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="6" style="background:#1a1a1a;">
+        <img class="tile-thumb" src="./Projects/Blood Unity/thumbnail.png" alt="Blood Unity" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Blood Unity</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="7" style="background:#d4c5b0;">
+        <img class="tile-thumb" src="./Projects/ANA - Young Lynx Gold Winner/thumbnail.png" alt="ANA - Young Lynx Gold Winner" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">ANA - Young Lynx Gold Winner</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="8" style="background:#f5f5f5;">
+        <img class="tile-thumb" src="./Projects/UNHCR x Reddit - Digital/thumbnail.png" alt="UNHCR x Reddit - Digital" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">UNHCR x Reddit - Digital</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="9" style="background:#1a1a3a;">
+        <img class="tile-thumb" src="./Projects/AstraZeneca - Neb Adventures/thumbnail.png" alt="AstraZeneca - Neb Adventures" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">AstraZeneca - Neb Adventures</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="10" style="background:#3a0a0a;">
+        <img class="tile-thumb" src="./Projects/Faux or Foe/thumbnail.png" alt="Faux or Foe" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Faux or Foe</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="11" style="background:#f0f0f0;">
+        <img class="tile-thumb" src="./Projects/Lighthouse - Unspoken UAE/thumbnail.png" alt="Lighthouse - Unspoken, UAE" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Lighthouse - Unspoken, UAE</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="12" style="background:#2a2a4a;">
+        <img class="tile-thumb" src="./Projects/Invitae - Boxes/thumbnail.png" alt="Invitae - Boxes" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Invitae - Boxes</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="13" style="background:#e8e8e8;">
+        <img class="tile-thumb" src="./Projects/Lighthouse - Unspoken UAE Case Study/thumbnail.png" alt="Lighthouse - Unspoken, UAE" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Lighthouse - Unspoken, UAE</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="14" style="background:#111;">
+        <img class="tile-thumb" src="./Projects/Sahara Shelter - Print/thumbnail.png" alt="Sahara Shelter - Print" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Sahara Shelter - Print</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="15" style="background:#2a3a2a;">
+        <img class="tile-thumb" src="./Projects/International Bank of Qatar/thumbnail.png" alt="International Bank of Qatar" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">International Bank of Qatar</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="16" style="background:#e0e0e0;">
+        <img class="tile-thumb" src="./Projects/VW - Think Big/thumbnail.png" alt="VW - Think Big" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">VW - Think Big</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="17" style="background:#1a1020;">
+        <img class="tile-thumb" src="./Projects/Qatar Airways Privilege Club/thumbnail.png" alt="Qatar Airways Privilege Club" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Qatar Airways Privilege Club</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="18" style="background:#e87040;">
+        <img class="tile-thumb" src="./Projects/Mastercard - Stand Up To Cancer/thumbnail.png" alt="Mastercard - Stand Up To Cancer" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Mastercard - Stand Up To Cancer</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="19" style="background:#d5cfc5;">
+        <img class="tile-thumb" src="./Projects/New Gallery/thumbnail.png" alt="New Gallery" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">New Gallery</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="20" style="background:#4a5a3a;">
+        <img class="tile-thumb" src="./Projects/Unilever - Print Handy Andy/thumbnail.png" alt="Unilever - Print (Handy Andy)" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Unilever - Print (Handy Andy)</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="21" style="background:#2a1a10;">
+        <img class="tile-thumb" src="./Projects/Vodafone - Qatar National Day/thumbnail.png" alt="Vodafone - Qatar National Day" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Vodafone - Qatar National Day</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="22" style="background:#1a1020;">
+        <img class="tile-thumb" src="./Projects/Vodafone - Radio/thumbnail.png" alt="Vodafone - Radio" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Vodafone - Radio</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="23" style="background:#1a1a2a;">
+        <img class="tile-thumb" src="./Projects/Qatar Airways Privilege Club Film/thumbnail.png" alt="Qatar Airways Privilege Club" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Qatar Airways Privilege Club</span>
+            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project detail overlay -->
+  <div id="project-detail">
+    <button class="project-detail-back" onclick="closeProject()">Back</button>
+    <div class="project-detail-images" id="project-detail-images"></div>
+  </div>
+
   <div id="resume-section" class="page-section">
     <div class="experience-layout">
       <div class="experience-header">Experience:</div>
@@ -486,46 +888,218 @@
       <p>What I love most about this industry is the belief that bold ideas can actually shift things. That's what keeps me going—finding ways to make creative work that's not just clever, but purposeful. Over the years, I've been lucky to have work recognized at Cannes Lions, D&amp;AD, Clios, and more. In 2019, I landed the #3 Art Director spot in the Middle East and North Africa via the B&amp;W Report. Some proud moments? Getting the Zero Tolerance Ribbon featured at the UN, helping set a blood donation record in Lebanon, igniting convos around gender equality, and picking up 3 D&amp;AD pencils for a refugee awareness campaign made on a $500 budget. Also proud (ish): eating 50 Ferrero Rochers in one shoot day. Regret? Yes. Worth it? Still deciding.</p>
     </div>
 
-    <div style="max-width:700px; margin-top:2rem; font-family:'Montserrat', system-ui, sans-serif; font-size:1rem; line-height:1.8; color:#333;">
-      <p>Find me on LinkedIn - <a href="https://www.linkedin.com/in/taskeen-limalia-319b443a/" target="_blank" style="font-weight:700; color:#333;">https://www.linkedin.com/in/taskeen-limalia-319b443a/</a></p>
-    </div>
-
-    <div style="max-width:700px; margin-top:2rem; font-family:'Montserrat', system-ui, sans-serif; font-weight:200; font-size:1.8rem; line-height:1.8; color:#333;">
-      <p style="margin:0;">Contact me:</p>
-      <p style="margin:0;">taskeen17@gmail.com</p>
-      <p style="margin:0;">Instagram: @taskeeners</p>
-      <p style="margin:0;">Twitter: @taskeeners</p>
+    <div style="max-width:700px; margin-top:2.5rem; display:flex; gap:1.5rem; align-items:center;">
+      <a href="https://www.linkedin.com/in/taskeen-limalia-319b443a/" target="_blank" title="LinkedIn" style="color:#333; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/taskeeners" target="_blank" title="Instagram" style="color:#333; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://twitter.com/taskeeners" target="_blank" title="Twitter" style="color:#333; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
     </div>
   </div>
 
   <div id="root"></div>
   <script type="module" src="./main.js"></script>
   <script>
+    function showSection(target) {
+      const workSection = document.getElementById('work-section');
+      const resumeSection = document.getElementById('resume-section');
+      const aboutSection = document.getElementById('about-section');
+      const root = document.getElementById('root');
+
+      // Hide all overlay sections
+      resumeSection.classList.remove('visible');
+      aboutSection.classList.remove('visible');
+      document.getElementById('project-detail').classList.remove('visible');
+
+      // Reset root & work
+      root.style.visibility = '';
+      root.style.pointerEvents = '';
+      workSection.classList.remove('hidden');
+      document.body.classList.remove('no-scroll');
+
+      if (target === '#work') {
+        // Show orbit + grid below (scrollable)
+        // root visible, work-section visible, body scrollable
+      } else if (target === '#resume') {
+        workSection.classList.add('hidden');
+        resumeSection.classList.add('visible');
+        root.style.visibility = 'hidden';
+        root.style.pointerEvents = 'none';
+        document.body.classList.add('no-scroll');
+      } else if (target === '#about') {
+        workSection.classList.add('hidden');
+        aboutSection.classList.add('visible');
+        root.style.visibility = 'hidden';
+        root.style.pointerEvents = 'none';
+        document.body.classList.add('no-scroll');
+      }
+
+      window.scrollTo(0, 0);
+    }
+
+    // Project data: maps project id to its case study images (hover overlays excluded)
+    const projectData = {
+      '1': ['./Projects/TJ Maxx Holiday Campaign/Project info.png', 'youtube:oNyWTaIy-HU'],
+      '2': ['./Projects/The Zero Tolerance Ribbon/project info.png', './Projects/The Zero Tolerance Ribbon/project info2.png', './Projects/The Zero Tolerance Ribbon/project info3.png'],
+      '3': ['./Projects/IKEA Wireless Charging Furniture/project info.png', './Projects/IKEA Wireless Charging Furniture/project info2.png'],
+      '4': ['./Projects/Vodafone - Online Film/project info.png', './Projects/Vodafone - Online Film/project info2.png'],
+      '5': ['./Projects/TJMAXX/project info2.png'],
+      '6': ['./Projects/Blood Unity/project info2.png'],
+      '7': ['./Projects/ANA - Young Lynx Gold Winner/project info2.png'],
+      '8': ['./Projects/UNHCR x Reddit - Digital/project info2.png', './Projects/UNHCR x Reddit - Digital/project info3.png'],
+      '9': ['./Projects/AstraZeneca - Neb Adventures/project info2.png'],
+      '10': [],
+      '11': [],
+      '12': [],
+      '13': ['./Projects/Lighthouse - Unspoken UAE Case Study/project info2.png'],
+      '14': ['./Projects/Sahara Shelter - Print/project info2.png'],
+      '15': ['./Projects/International Bank of Qatar/project info2.png'],
+      '16': ['./Projects/VW - Think Big/project info2.png'],
+      '17': ['./Projects/Qatar Airways Privilege Club/project info2.png'],
+      '18': ['./Projects/Mastercard - Stand Up To Cancer/project info2.png', 'youtube:5Kyv15kX8IA'],
+      '19': [],
+      '20': ['./Projects/Unilever - Print Handy Andy/project info2.png'],
+      '21': [],
+      '22': [],
+      '23': []
+    };
+
+    // All project tile data for building the grid
+    const projectTiles = [
+      { id: '1', title: 'TJ Maxx Holiday Campaign', thumb: './Projects/TJ Maxx Holiday Campaign/thumbnail.png', bg: '#1a1a1a' },
+      { id: '2', title: 'The Zero Tolerance Ribbon', thumb: null, bg: '#7ABCCE' },
+      { id: '3', title: 'IKEA Wireless Charging Furniture', thumb: './Projects/IKEA Wireless Charging Furniture/thumbnail.png', bg: '#111' },
+      { id: '4', title: 'Vodafone - Online Film', thumb: './Projects/Vodafone - Online Film/thumbnail.png', bg: '#1a2a3a' },
+      { id: '5', title: 'TJMAXX', thumb: './Projects/TJMAXX/thumbnail.png', bg: '#2a1a1a' },
+      { id: '6', title: 'Blood Unity', thumb: './Projects/Blood Unity/thumbnail.png', bg: '#1a1a1a' },
+      { id: '7', title: 'ANA - Young Lynx Gold Winner', thumb: './Projects/ANA - Young Lynx Gold Winner/thumbnail.png', bg: '#d4c5b0' },
+      { id: '8', title: 'UNHCR x Reddit - Digital', thumb: './Projects/UNHCR x Reddit - Digital/thumbnail.png', bg: '#f5f5f5' },
+      { id: '9', title: 'AstraZeneca - Neb Adventures', thumb: './Projects/AstraZeneca - Neb Adventures/thumbnail.png', bg: '#1a1a3a' },
+      { id: '10', title: 'Faux or Foe', thumb: './Projects/Faux or Foe/thumbnail.png', bg: '#3a0a0a' },
+      { id: '11', title: 'Lighthouse - Unspoken, UAE', thumb: './Projects/Lighthouse - Unspoken UAE/thumbnail.png', bg: '#f0f0f0' },
+      { id: '12', title: 'Invitae - Boxes', thumb: './Projects/Invitae - Boxes/thumbnail.png', bg: '#2a2a4a' },
+      { id: '13', title: 'Lighthouse - Unspoken, UAE', thumb: './Projects/Lighthouse - Unspoken UAE Case Study/thumbnail.png', bg: '#e8e8e8' },
+      { id: '14', title: 'Sahara Shelter - Print', thumb: './Projects/Sahara Shelter - Print/thumbnail.png', bg: '#111' },
+      { id: '15', title: 'International Bank of Qatar', thumb: './Projects/International Bank of Qatar/thumbnail.png', bg: '#2a3a2a' },
+      { id: '16', title: 'VW - Think Big', thumb: './Projects/VW - Think Big/thumbnail.png', bg: '#e0e0e0' },
+      { id: '17', title: 'Qatar Airways Privilege Club', thumb: './Projects/Qatar Airways Privilege Club/thumbnail.png', bg: '#1a1020' },
+      { id: '18', title: 'Mastercard - Stand Up To Cancer', thumb: './Projects/Mastercard - Stand Up To Cancer/thumbnail.png', bg: '#e87040' },
+      { id: '19', title: 'New Gallery', thumb: './Projects/New Gallery/thumbnail.png', bg: '#d5cfc5' },
+      { id: '20', title: 'Unilever - Print (Handy Andy)', thumb: './Projects/Unilever - Print Handy Andy/thumbnail.png', bg: '#4a5a3a' },
+      { id: '21', title: 'Vodafone - Qatar National Day', thumb: './Projects/Vodafone - Qatar National Day/thumbnail.png', bg: '#2a1a10' },
+      { id: '22', title: 'Vodafone - Radio', thumb: './Projects/Vodafone - Radio/thumbnail.png', bg: '#1a1020' },
+      { id: '23', title: 'Qatar Airways Privilege Club', thumb: './Projects/Qatar Airways Privilege Club Film/thumbnail.png', bg: '#1a1a2a' }
+    ];
+
+    function buildProjectGrid(currentId) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'project-detail-grid';
+      const grid = document.createElement('div');
+      grid.className = 'projects-grid';
+
+      projectTiles.forEach(p => {
+        const tile = document.createElement('div');
+        tile.className = 'project-tile' + (p.id === currentId ? ' current' : '');
+        tile.style.background = p.bg;
+        tile.setAttribute('data-project', p.id);
+
+        if (p.thumb) {
+          const img = document.createElement('img');
+          img.className = 'tile-thumb';
+          img.src = p.thumb;
+          img.alt = p.title;
+          tile.appendChild(img);
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'tile-overlay';
+        if (!p.thumb) overlay.style.opacity = '1';
+        const inner = document.createElement('div');
+        const title = document.createElement('span');
+        title.className = 'project-title';
+        title.textContent = p.title;
+        const sub = document.createElement('div');
+        sub.className = 'project-subtitle';
+        sub.innerHTML = '&mdash; view &mdash;';
+        inner.appendChild(title);
+        inner.appendChild(sub);
+        overlay.appendChild(inner);
+        tile.appendChild(overlay);
+
+        tile.addEventListener('click', () => openProject(p.id));
+        grid.appendChild(tile);
+      });
+
+      wrapper.appendChild(grid);
+      return wrapper;
+    }
+
+    function openProject(id) {
+      const detail = document.getElementById('project-detail');
+      const container = document.getElementById('project-detail-images');
+      const images = projectData[id];
+      if (!images) return;
+
+      container.innerHTML = '';
+      images.forEach(src => {
+        if (src.startsWith('youtube:')) {
+          const videoId = src.split(':')[1];
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'position:relative;width:100%;padding-bottom:56.25%;margin-bottom:0.5rem;';
+          const iframe = document.createElement('iframe');
+          iframe.src = 'https://www.youtube.com/embed/' + videoId;
+          iframe.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:2px;';
+          iframe.setAttribute('allowfullscreen', '');
+          iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+          wrapper.appendChild(iframe);
+          container.appendChild(wrapper);
+        } else {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = 'Project detail';
+          container.appendChild(img);
+        }
+      });
+
+      // Append the projects grid below the detail images
+      container.appendChild(buildProjectGrid(id));
+
+      detail.classList.add('visible');
+      document.getElementById('work-section').classList.add('hidden');
+      document.getElementById('root').style.visibility = 'hidden';
+      document.getElementById('root').style.pointerEvents = 'none';
+      document.body.classList.add('no-scroll');
+      detail.scrollTop = 0;
+    }
+
+    function closeProject() {
+      const detail = document.getElementById('project-detail');
+      detail.classList.remove('visible');
+      document.getElementById('work-section').classList.remove('hidden');
+      document.getElementById('root').style.visibility = '';
+      document.getElementById('root').style.pointerEvents = '';
+      document.body.classList.remove('no-scroll');
+    }
+
+    document.querySelectorAll('.project-tile[data-project]').forEach(tile => {
+      tile.addEventListener('click', () => {
+        openProject(tile.getAttribute('data-project'));
+      });
+    });
+
     document.querySelectorAll('#top-nav a').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const target = link.getAttribute('href');
 
-        // Update active nav link
         document.querySelectorAll('#top-nav a').forEach(a => a.classList.remove('active'));
         link.classList.add('active');
 
-        // Toggle sections
-        const resumeSection = document.getElementById('resume-section');
-        const aboutSection = document.getElementById('about-section');
-        const root = document.getElementById('root');
-
-        resumeSection.classList.remove('visible');
-        aboutSection.classList.remove('visible');
-        root.style.display = '';
-
-        if (target === '#resume') {
-          resumeSection.classList.add('visible');
-          root.style.display = 'none';
-        } else if (target === '#about') {
-          aboutSection.classList.add('visible');
-          root.style.display = 'none';
-        }
+        showSection(target);
       });
     });
   </script>
