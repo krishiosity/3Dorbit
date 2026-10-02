@@ -8,8 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://unpkg.com" crossorigin />
   <link rel="modulepreload" href="https://unpkg.com/three@0.183.0/build/three.module.js" crossorigin />
-  <!-- Only weights 400 and 500 are ever used; 700 was pulling a third font
-       file over the wire for nothing. -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;700&display=swap" rel="stylesheet" />
   <style>
     html, body {
@@ -62,7 +60,6 @@
       backdrop-filter: blur(8px);
     }
     #top-nav a {
-      font-family: 'Montserrat', system-ui, sans-serif;
       font-size: 0.85rem;
       font-weight: 500;
       letter-spacing: 0.12em;
@@ -273,6 +270,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      text-align: center;
       opacity: 0;
       transition: opacity 0.35s ease;
     }
@@ -475,7 +473,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">TJ Maxx Holiday Campaign</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -484,7 +481,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">The Zero Tolerance Ribbon</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -493,7 +489,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">IKEA Wireless Charging Furniture</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -502,7 +497,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Blood Unity</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -511,7 +505,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">ANA - Young Lynx Gold Winner</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -520,7 +513,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">UNHCR x Reddit - Digital</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -529,7 +521,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">AstraZeneca - Neb Adventures</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -538,7 +529,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Faux or Foe</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -547,7 +537,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Lighthouse - Unspoken, UAE</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -556,7 +545,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Invitae - Boxes</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -565,7 +553,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Sahara Shelter - Print</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -574,7 +561,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">International Bank of Qatar</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -583,7 +569,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">VW - Think Big</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -592,7 +577,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Mastercard - Stand Up To Cancer</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -601,7 +585,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">New Gallery</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -610,7 +593,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Unilever - Print (Handy Andy)</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -619,7 +601,6 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Vodafone - Qatar National Day</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
           </div>
         </div>
       </div>
@@ -628,7 +609,22 @@
         <div class="tile-overlay">
           <div>
             <span class="project-title">Vodafone - Radio</span>
-            <div class="project-subtitle">&mdash; view &mdash;</div>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="23" style="background:#0a1a2a;">
+        <img class="tile-thumb" src="./Projects/Vodafone - Online Film/thumbnail.png" alt="Vodafone - Online Film" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Vodafone - Online Film</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-tile" data-project="24" style="background:#4a1a2a;">
+        <img class="tile-thumb" src="./Projects/Qatar Airways Privilege Club/thumbnail.png" alt="Qatar Airways Privilege Club" />
+        <div class="tile-overlay">
+          <div>
+            <span class="project-title">Qatar Airways Privilege Club</span>
           </div>
         </div>
       </div>
@@ -868,15 +864,15 @@
       <p>What I love most about this industry is the belief that bold ideas can actually shift things. That's what keeps me going—finding ways to make creative work that's not just clever, but purposeful. Over the years, I've been lucky to have work recognized at Cannes Lions, D&amp;AD, Clios, and more. In 2019, I landed the #3 Art Director spot in the Middle East and North Africa via the B&amp;W Report. Some proud moments? Getting the Zero Tolerance Ribbon featured at the UN, helping set a blood donation record in Lebanon, igniting convos around gender equality, and picking up 3 D&amp;AD pencils for a refugee awareness campaign made on a $500 budget. Also proud (ish): eating 50 Ferrero Rochers in one shoot day. Regret? Yes. Worth it? Still deciding.</p>
     </div>
 
-    <div style="max-width:700px; margin-top:2.5rem; display:flex; gap:1.5rem; align-items:center;">
+    <div style="max-width:700px; margin-top:2.5rem; display:flex; gap:0.75rem; align-items:center;">
       <a href="https://www.linkedin.com/in/taskeen-limalia-319b443a/" target="_blank" title="LinkedIn" style="color:#333; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </a>
       <a href="https://www.instagram.com/taskeeners" target="_blank" title="Instagram" style="color:#333; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
       </a>
       <a href="https://twitter.com/taskeeners" target="_blank" title="Twitter" style="color:#333; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       </a>
     </div>
   </div>
@@ -950,12 +946,14 @@
       '19': { title: 'New Gallery', desc: '' },
       '20': { title: 'Unilever - Print (Handy Andy)', desc: 'You can bet that the cracks and gaps in your floors and walls are clogged with dirt and grime, even though your home may look clean. We needed to remind the public that Handy Andy is tough enough to \'clean every inch\' of your home. These visuals communicate the benefit of the product by leading the viewer to think they are looking at a sprawling, paradise landscape — but the item subtly included tells the viewer that this is in fact in a tiny space in the home.' },
       '21': { title: 'Vodafone - Qatar National Day', desc: '' },
-      '22': { title: 'Vodafone - Radio', desc: '' },
+      '23': { title: 'Vodafone - Online Film', desc: 'Unanticipated roaming or data charges can be shocking... as told through this horror film series shot by renowned Ali Ali for Vodafone Qatar.' },
+      '24': { title: 'Qatar Airways Privilege Club', desc: '' },
     };
 
     // Project media: each item has type (image|video|link), src, label, and optional thumb
     const projectData = {
       '1': [
+        { type: 'image', src: './Projects/TJ Maxx Holiday Campaign/Project info.png', label: 'Campaign Overview' },
         { type: 'video', src: 'youtube:0az8tM38KD8', label: 'Holiday Campaign Film', thumb: 'https://img.youtube.com/vi/0az8tM38KD8/maxresdefault.jpg' }
       ],
       '2': [
@@ -1001,14 +999,23 @@
       '20': [
         { type: 'image', src: './Projects/Unilever - Print Handy Andy/project info2.png', label: 'Print Craft' }
       ],
-      '21': [],
+      '21': [
+        { type: 'image', src: './Projects/Vodafone - Qatar National Day/project info.png', label: 'Qatar National Day Film' }
+      ],
       '22': [],
+      '23': [
+        { type: 'image', src: './Projects/Vodafone - Online Film/project info.png', label: 'Campaign Overview' },
+        { type: 'image', src: './Projects/Vodafone - Online Film/project info2.png', label: 'Film Still' }
+      ],
+      '24': [
+        { type: 'image', src: './Projects/Qatar Airways Privilege Club/project info2.png', label: 'Privilege Club Campaign' }
+      ],
     };
 
     // All project tile data for building the grid
     const projectTiles = [
       { id: '1', title: 'TJ Maxx Holiday Campaign', thumb: './Projects/TJ Maxx Holiday Campaign/thumbnail.png', bg: '#1a1a1a' },
-      { id: '2', title: 'The Zero Tolerance Ribbon', thumb: null, bg: '#7ABCCE' },
+      { id: '2', title: 'The Zero Tolerance Ribbon', thumb: './Projects/The Zero Tolerance Ribbon/Thumbnail.png', bg: '#7ABCCE' },
       { id: '3', title: 'IKEA Wireless Charging Furniture', thumb: './Projects/IKEA Wireless Charging Furniture/thumbnail.png', bg: '#111' },
       { id: '6', title: 'Blood Unity', thumb: './Projects/Blood Unity/thumbnail.png', bg: '#1a1a1a' },
       { id: '7', title: 'ANA - Young Lynx Gold Winner', thumb: './Projects/ANA - Young Lynx Gold Winner/thumbnail.png', bg: '#d4c5b0' },
@@ -1024,7 +1031,9 @@
       { id: '19', title: 'New Gallery', thumb: './Projects/New Gallery/thumbnail.png', bg: '#d5cfc5' },
       { id: '20', title: 'Unilever - Print (Handy Andy)', thumb: './Projects/Unilever - Print Handy Andy/thumbnail.png', bg: '#4a5a3a' },
       { id: '21', title: 'Vodafone - Qatar National Day', thumb: './Projects/Vodafone - Qatar National Day/thumbnail.png', bg: '#2a1a10' },
-      { id: '22', title: 'Vodafone - Radio', thumb: './Projects/Vodafone - Radio/thumbnail.png', bg: '#1a1020' }
+      { id: '22', title: 'Vodafone - Radio', thumb: './Projects/Vodafone - Radio/thumbnail.png', bg: '#1a1020' },
+      { id: '23', title: 'Vodafone - Online Film', thumb: './Projects/Vodafone - Online Film/thumbnail.png', bg: '#0a1a2a' },
+      { id: '24', title: 'Qatar Airways Privilege Club', thumb: './Projects/Qatar Airways Privilege Club/thumbnail.png', bg: '#4a1a2a' }
     ];
 
     function buildProjectGrid(currentId) {
@@ -1054,11 +1063,7 @@
         const title = document.createElement('span');
         title.className = 'project-title';
         title.textContent = p.title;
-        const sub = document.createElement('div');
-        sub.className = 'project-subtitle';
-        sub.innerHTML = '&mdash; view &mdash;';
         inner.appendChild(title);
-        inner.appendChild(sub);
         overlay.appendChild(inner);
         tile.appendChild(overlay);
 
